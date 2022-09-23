@@ -8,7 +8,7 @@ import (
 )
 
 func TestSave(t *testing.T) {
-	person := &domain.Person{Id: 0, Name: "Brunno", Birthdata: "1998-08-13"}
+	person := &domain.Person{Id: 0, Name: "Brunno", Birthdate: "1998-08-13"}
 	personService := &service.PersonService{}
 
 	get, err := personService.Save(person)
@@ -16,14 +16,14 @@ func TestSave(t *testing.T) {
 		t.Errorf("erro ao tentar salvar o registro da pessoa")
 	}
 
-	if get.Name != person.Name || get.Birthdata != person.Birthdata {
+	if get.Name != person.Name || get.Birthdate != person.Birthdate {
 		t.Errorf("as informações persistidas não são iguais as informações fornecidas")
 	}
 }
 
 func TestGetById(t *testing.T) {
 	service := &service.PersonService{}
-	person := &domain.Person{Id: 0, Name: "Brunno", Birthdata: "1998-08-13"}
+	person := &domain.Person{Id: 0, Name: "Brunno", Birthdate: "1998-08-13"}
 	service.Save(person)
 
 	got, err := service.GetById(1)
@@ -31,14 +31,14 @@ func TestGetById(t *testing.T) {
 		t.Errorf("falha ao buscar o registro pelo id")
 	}
 
-	if got == nil || got.Name != person.Name || got.Birthdata != person.Birthdata {
+	if got == nil || got.Name != person.Name || got.Birthdate != person.Birthdate {
 		t.Errorf("falha ao recuperar o registro pelo id")
 	}
 }
 
 func TestUpdate(t *testing.T) {
 	service := &service.PersonService{}
-	person := &domain.Person{Id: 0, Name: "Brunno", Birthdata: "1998-08-13"}
+	person := &domain.Person{Id: 0, Name: "Brunno", Birthdate: "1998-08-13"}
 
 	service.Save(person)
 
@@ -60,7 +60,7 @@ func TestUpdate(t *testing.T) {
 
 func TestDelete(t *testing.T) {
 	service := &service.PersonService{}
-	person := &domain.Person{Id: 0, Name: "Brunno", Birthdata: "1998-08-13"}
+	person := &domain.Person{Id: 0, Name: "Brunno", Birthdate: "1998-08-13"}
 
 	saved, err := service.Save(person)
 	if err != nil {

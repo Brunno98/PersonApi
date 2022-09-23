@@ -1,7 +1,7 @@
 package domain
 
 type Person struct {
-	Id        int
-	Name      string
-	Birthdata string
+	Id        int    `json:"id"`
+	Name      string `json:"name"`
+	Birthdate string `json:"birthdate"`
 }

@@ -22,7 +22,7 @@ func (p *PersonService) GetById(id int) (*domain.Person, error) {
 }
 
 func (p *PersonService) Save(person *domain.Person) (*domain.Person, error) {
-	_, err := time.Parse("2006-01-02", person.Birthdata)
+	_, err := time.Parse("2006-01-02", person.Birthdate)
 	if err != nil {
 		return nil, errors.New("data de nascimento inválida")
 	}
@@ -36,11 +36,17 @@ func (p *PersonService) Save(person *domain.Person) (*domain.Person, error) {
 }
 
 func (p *PersonService) Update(person *domain.Person) (*domain.Person, error) {
+	if _, hasKey := listIds[person.Id]; !hasKey {
+		return nil, errors.New("id não existe")
+	}
 	listIds[person.Id] = person
 	return person, nil
 }
 
 func (p *PersonService) Delete(id int) error {
+	if _, hasKey := listIds[id]; !hasKey {
+		return errors.New("id não existe")
+	}
 	delete(listIds, id)
 	return nil
 }
