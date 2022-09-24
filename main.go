@@ -2,13 +2,15 @@ package main
 
 import (
 	"github.com/brunno98/PersonApi/app/controller"
+	"github.com/brunno98/PersonApi/app/infraestructure"
 	"github.com/brunno98/PersonApi/app/service"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	service := service.PersonService{}
-	controller := controller.PersonController{Service: &service}
+	database := infraestructure.InMemoryDB{}
+	service := service.PersonService{IPersonRepository: &database}
+	controller := controller.PersonController{IPersonService: &service}
 	router := gin.Default()
 
 	router.GET("/person/:id", controller.GetPersonById)

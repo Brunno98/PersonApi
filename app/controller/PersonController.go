@@ -5,12 +5,12 @@ import (
 	"strconv"
 
 	"github.com/brunno98/PersonApi/app/domain"
-	"github.com/brunno98/PersonApi/app/service"
+	"github.com/brunno98/PersonApi/app/interfaces"
 	"github.com/gin-gonic/gin"
 )
 
 type PersonController struct {
-	Service *service.PersonService
+	interfaces.IPersonService
 }
 
 func (p *PersonController) GetPersonById(c *gin.Context) {
@@ -19,7 +19,7 @@ func (p *PersonController) GetPersonById(c *gin.Context) {
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
-	person, err := p.Service.GetById(id)
+	person, err := p.GetById(id)
 	if err != nil {
 		c.AbortWithStatus(http.StatusNotFound)
 		return
@@ -34,7 +34,7 @@ func (p *PersonController) GetPersonById(c *gin.Context) {
 func (p *PersonController) SavePerson(c *gin.Context) {
 	person := domain.Person{}
 	c.ShouldBindJSON(&person)
-	_, err := p.Service.Save(&person)
+	_, err := p.Save(&person)
 	if err != nil {
 		c.AbortWithStatus(http.StatusBadGateway)
 		return
@@ -58,7 +58,7 @@ func (p *PersonController) UpdatePerson(c *gin.Context) {
 		return
 	}
 
-	if _, err := p.Service.Update(&person); err != nil {
+	if _, err := p.Update(&person); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, map[string]string{"message": err.Error()})
 		return
 	}
@@ -73,7 +73,7 @@ func (p *PersonController) DeletePerson(c *gin.Context) {
 		return
 	}
 
-	err = p.Service.Delete(id)
+	err = p.Delete(id)
 	if err != nil {
 		c.AbortWithStatus(http.StatusNotFound)
 		return

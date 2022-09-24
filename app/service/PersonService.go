@@ -5,18 +5,20 @@ import (
 	"time"
 
 	"github.com/brunno98/PersonApi/app/domain"
+	"github.com/brunno98/PersonApi/app/interfaces"
 )
 
 type PersonService struct {
+	interfaces.IPersonRepository
 }
 
 var listIds map[int]*domain.Person = make(map[int]*domain.Person)
 var index = 0
 
 func (p *PersonService) GetById(id int) (*domain.Person, error) {
-	person := listIds[id]
-	if person == nil {
-		return nil, errors.New("id não encontrado")
+	person, err := p.FindById(id)
+	if err != nil {
+		return nil, errors.New("falha ao buscar pessoa pelo id")
 	}
 	return person, nil
 }
@@ -27,26 +29,37 @@ func (p *PersonService) Save(person *domain.Person) (*domain.Person, error) {
 		return nil, errors.New("data de nascimento inválida")
 	}
 
-	index += 1
-	person.Id = index
-
-	listIds[index] = person
+	person, err = p.Insert(person)
+	if err != nil {
+		return nil, errors.New("falha ao salvar pessoa")
+	}
 
 	return person, nil
 }
 
 func (p *PersonService) Update(person *domain.Person) (*domain.Person, error) {
-	if _, hasKey := listIds[person.Id]; !hasKey {
-		return nil, errors.New("id não existe")
+	persistedPerson, err := p.FindById(person.Id)
+	if err != nil {
+		return nil, errors.New("falha ao buscar pessoa durante operação de update")
 	}
-	listIds[person.Id] = person
+	if persistedPerson == nil {
+		return nil, errors.New("id não encontrado")
+	}
+
+	person, err = p.IPersonRepository.Update(person)
+	if err != nil {
+		return nil, errors.New("falha ao atualizar registro")
+	}
 	return person, nil
 }
 
 func (p *PersonService) Delete(id int) error {
-	if _, hasKey := listIds[id]; !hasKey {
-		return errors.New("id não existe")
+	ok, err := p.IPersonRepository.Delete(id)
+	if err != nil {
+		return errors.New("falha na operação de exclusão")
 	}
-	delete(listIds, id)
+	if !ok {
+		return errors.New("id não encontrado")
+	}
 	return nil
 }
