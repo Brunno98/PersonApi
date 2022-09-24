@@ -12,9 +12,6 @@ type PersonService struct {
 	interfaces.IPersonRepository
 }
 
-var listIds map[int]*domain.Person = make(map[int]*domain.Person)
-var index = 0
-
 func (p *PersonService) GetById(id int) (*domain.Person, error) {
 	person, err := p.FindById(id)
 	if err != nil {
