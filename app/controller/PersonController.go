@@ -32,9 +32,9 @@ func (p *PersonController) GetPersonById(c *gin.Context) {
 }
 
 func (p *PersonController) SavePerson(c *gin.Context) {
-	person := domain.Person{}
-	c.ShouldBindJSON(&person)
-	_, err := p.Save(&person)
+	requestPerson := domain.Person{}
+	c.ShouldBindJSON(&requestPerson)
+	person, err := p.Save(&requestPerson)
 	if err != nil {
 		c.AbortWithStatus(http.StatusBadGateway)
 		return
