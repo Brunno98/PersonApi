@@ -11,7 +11,7 @@ Api genérica que realiza o CRUD de registro de pessoas
 - Praticar o desenvolvimento dentro de containers docker
 
 ## TO DO:
-- [] Persistencia em banco de dados
+- [x] Persistencia em banco de dados
 - [x] Controller
 - [x] Service
 - [x] Docker-compose com o banco de dados
