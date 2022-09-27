@@ -15,3 +15,5 @@ Api genérica que realiza o CRUD de registro de pessoas
 - [x] Controller
 - [x] Service
 - [x] Docker-compose com o banco de dados
+- [ ] Swagger / OpenApi
+- [ ] Implementar boas praticas de conexão com o banco de dados
